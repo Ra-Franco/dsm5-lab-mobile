@@ -9,12 +9,11 @@ import java.net.URI;
 @RequestMapping("/auth")
 public class UserController {
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/signup")
     public ResponseEntity<?> createUser(
             @RequestBody User user
     ) {
-        System.out.println(user.getUsername());
-        URI uri = URI.create("/auth/users/" + user.getUsername());
+        URI uri = URI.create("/auth/" + user.getUsername());
         return ResponseEntity.created(uri).body(user.getUsername());
     }
 
