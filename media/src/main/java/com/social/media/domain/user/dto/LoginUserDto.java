@@ -1,4 +1,4 @@
 package com.social.media.domain.user.dto;
 
-public class LoginUserDto {
+public record LoginUserDto(String username, String password) {
 }

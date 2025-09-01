@@ -1,4 +1,4 @@
-package com.social.media.domain.user;
+package com.social.media.domain.jwt;
 
-public class JwtResponse {
+public record JwtResponse(String token, long expiresIn) {
 }
