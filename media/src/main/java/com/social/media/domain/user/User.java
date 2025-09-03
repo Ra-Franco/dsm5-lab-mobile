@@ -17,7 +17,6 @@ public class User implements UserDetails, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-
     @Column(unique = true, nullable = false, length = 55)
     private String username;
     @Column(unique = true, nullable = false, length = 60)
