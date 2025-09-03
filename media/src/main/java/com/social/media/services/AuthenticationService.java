@@ -23,7 +23,7 @@ public class AuthenticationService {
     }
 
     public User signup(RegisterUserDto userDto){
-        User user = new User(userDto.username(), passwordEncoder.encode(userDto.password()));
+        User user = new User(userDto.username(), passwordEncoder.encode(userDto.password()), userDto.email());
 
         return userRepository.save(user);
     }
