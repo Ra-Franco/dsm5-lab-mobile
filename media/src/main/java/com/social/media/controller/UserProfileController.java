@@ -32,14 +32,14 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfile);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UserProfileDto> updateUserProfile(
             @PathVariable("id") Long id,
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody UserProfileDto dto
+            @RequestBody UserProfileDto dto,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        //TODO
-        return ResponseEntity.ok().build();
+        UserProfileDto userProfile = userProfileService.updateUserProfile(id, dto, userDetails);
+        return ResponseEntity.ok(userProfile);
     }
 
 }
