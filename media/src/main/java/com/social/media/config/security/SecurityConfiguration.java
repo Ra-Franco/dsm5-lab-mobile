@@ -29,7 +29,9 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+
+        http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
                     req.anyRequest().authenticated();
@@ -40,15 +42,15 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authenticationProvider(this.authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-    return http.build();
+        return http.build();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
 
         UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
         configSource.registerCorsConfiguration("/**", corsConfiguration);

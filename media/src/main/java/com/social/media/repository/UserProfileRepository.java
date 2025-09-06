@@ -1,6 +1,6 @@
 package com.social.media.repository;
 
-import com.social.media.domain.user.UserProfile;
+import com.social.media.domain.user_profile.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

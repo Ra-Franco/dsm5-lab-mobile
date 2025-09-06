@@ -1,5 +1,6 @@
-package com.social.media.domain.user;
+package com.social.media.domain.user_profile;
 
+import com.social.media.domain.user.User;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,6 +24,15 @@ public class UserProfile {
 
     @Column(name = "profile_picture")
     private String profilePicture;
+
+    public UserProfile() {}
+
+    public UserProfile(User user, String bio, String fullname, String profilePicture) {
+        this.user = user;
+        this.bio = bio;
+        this.fullName = fullname;
+        this.profilePicture = profilePicture;
+    }
 
     public Long getId() {
         return id;
