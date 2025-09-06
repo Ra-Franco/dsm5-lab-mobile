@@ -3,11 +3,13 @@ package com.social.media.domain.posts;
 import com.social.media.domain.user.User;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "posts")
-public class Posts {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,13 +18,19 @@ public class Posts {
     @Column(name = "image_url")
     private String imageUrl;
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",referencedColumnName = "user_id")
     private User user;
     //TODO Likes
 
-    public Posts() {}
+    public Post() {}
+
+    public Post(String text, String imageUrl, User user) {
+        this.text = text;
+        this.imageUrl = imageUrl;
+        this.user = user;
+    }
 
     public Long getId() {
         return id;
@@ -44,7 +52,7 @@ public class Posts {
         this.imageUrl = imageUrl;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
     

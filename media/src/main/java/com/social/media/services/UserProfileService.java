@@ -15,44 +15,36 @@ import java.util.Optional;
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
-    private final UserRepository userRepository;
-    public UserProfileService(UserProfileRepository userProfileRepository, UserRepository userRepository) {
+    private final UserService userService;
+
+    public UserProfileService(UserProfileRepository userProfileRepository, UserService userService) {
         this.userProfileRepository = userProfileRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public UserProfileDto create(String username, UserProfileDto dto){
-        Optional<User> user = userRepository.findByUsername(username);
-        if(user.isPresent()){
-            UserProfile userProfile = this.userProfileRepository.save(new UserProfile(user.get(), dto.bio(), dto.fullname(), dto.profileImageUrl()));
+        User user = userService.findByUsernameOrThrow(username);
+            UserProfile userProfile = this.userProfileRepository.save(new UserProfile(user, dto.bio(), dto.fullname(), dto.profileImageUrl()));
             return this.createDto(userProfile);
-        } else {
-            throw new EntityNotFoundException("User not found");
-        }
-
     }
 
     public UserProfileDto getUserProfile(Long id){
-        Optional<UserProfile> user = userProfileRepository.findById(id);
-        if(user.isPresent()){
-            return this.createDto(user.get());
-        } else {
-            throw new EntityNotFoundException("User not found");
-        }
+        UserProfile userProfile = this.findUserProfileById(id);
+            return this.createDto(userProfile);
     }
 
-    public UserProfileDto updateUserProfile(Long id, UserProfileDto dto, UserDetails userDetails){
-        Optional<UserProfile> user = userProfileRepository.findById(id);
-        if(user.isPresent()){
-            UserProfile userProfile = user.get();
-            if (!userDetails.getUsername().equals(userProfile.getUser().getUsername())) throw new RuntimeException("User not allowed to update profile");
-            userProfile.setBio(dto.bio());
-            userProfile.setFullName(dto.fullname());
-            userProfile.setProfilePicture(dto.profileImageUrl());
-            return this.createDto(userProfileRepository.save(userProfile));
-        } else {
-            throw new EntityNotFoundException("User not found");
-        }
+    public UserProfileDto updateUserProfile(Long id, UserProfileDto dto, String username){
+        UserProfile userProfile = this.findUserProfileById(id);
+        if (!username.equals(userProfile.getUser().getUsername())) throw new RuntimeException("User not allowed to update profile");
+        userProfile.setBio(dto.bio());
+        userProfile.setFullName(dto.fullname());
+        userProfile.setProfilePicture(dto.profileImageUrl());
+        return this.createDto(userProfileRepository.save(userProfile));
+    }
+
+    private UserProfile findUserProfileById(Long id){
+        return this.userProfileRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     private UserProfileDto createDto(UserProfile userProfile){

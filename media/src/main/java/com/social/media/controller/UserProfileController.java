@@ -38,7 +38,7 @@ public class UserProfileController {
             @RequestBody UserProfileDto dto,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        UserProfileDto userProfile = userProfileService.updateUserProfile(id, dto, userDetails);
+        UserProfileDto userProfile = userProfileService.updateUserProfile(id, dto, userDetails.getUsername());
         return ResponseEntity.ok(userProfile);
     }
 
