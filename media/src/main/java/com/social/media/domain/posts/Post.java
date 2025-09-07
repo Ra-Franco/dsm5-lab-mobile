@@ -1,14 +1,19 @@
 package com.social.media.domain.posts;
 
+import com.social.media.domain.like.Like;
 import com.social.media.domain.user.User;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +23,13 @@ public class Post {
     @Column(name = "image_url")
     private String imageUrl;
     @Column(name = "created_at")
+    @CreatedDate
     private LocalDateTime createdAt;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id",referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",referencedColumnName = "user_id", nullable = false)
     private User user;
-    //TODO Likes
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Like> likes;
 
     public Post() {}
 
