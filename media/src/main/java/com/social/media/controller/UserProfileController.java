@@ -1,16 +1,17 @@
 package com.social.media.controller;
 
-import com.social.media.domain.user_profile.UserProfile;
 import com.social.media.domain.user_profile.dto.UserProfileDto;
 import com.social.media.domain.user_profile.dto.UserProfileFollowDto;
 import com.social.media.services.FollowService;
 import com.social.media.services.UserProfileService;
-import com.social.media.services.UserService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/profile")
@@ -68,5 +69,21 @@ public class UserProfileController {
     ){
         this.followService.unfollowUser(userDetails.getUsername(), id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/upload")
+    public ResponseEntity<UserProfileDto> uploadUserProfile(@PathVariable Long id,
+                                               @RequestParam("file")MultipartFile file) throws IOException {
+        UserProfileDto userProfile = userProfileService.updateProfilePicture(file, id);
+        return ResponseEntity.ok(userProfile);
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id,
+                                                  @AuthenticationPrincipal UserDetails userDetails) {
+        UserProfileFollowDto profile = this.userProfileService.getUserProfile(userDetails.getUsername(), id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(profile.profileImageUrl());
     }
 }

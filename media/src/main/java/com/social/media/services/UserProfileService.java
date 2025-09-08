@@ -7,14 +7,11 @@ import com.social.media.domain.user_profile.dto.UserProfileFollowDto;
 import com.social.media.exception.UserNotAllowedException;
 import com.social.media.exception.UserNotFoundException;
 import com.social.media.repository.UserProfileRepository;
-import com.social.media.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class UserProfileService {
@@ -31,7 +28,7 @@ public class UserProfileService {
 
     public UserProfileDto create(String username, UserProfileDto dto){
         User user = userService.findByUsernameOrThrow(username);
-            UserProfile userProfile = this.userProfileRepository.save(new UserProfile(user, dto.bio(), dto.fullname(), dto.profileImageUrl()));
+            UserProfile userProfile = this.userProfileRepository.save(new UserProfile(user, dto.bio(), dto.fullname()));
             return this.createDto(userProfile);
     }
 
@@ -47,8 +44,14 @@ public class UserProfileService {
         if (!username.equals(userProfile.getUser().getUsername())) throw new UserNotAllowedException();
         userProfile.setBio(dto.bio());
         userProfile.setFullName(dto.fullname());
-        userProfile.setProfilePicture(dto.profileImageUrl());
+
         return this.createDto(userProfileRepository.save(userProfile));
+    }
+
+    public UserProfileDto updateProfilePicture(MultipartFile file, Long id) throws IOException {
+        UserProfile userProfile = this.findUserProfileById(id);
+        userProfile.setProfilePicture(file.getBytes());
+        return this.createDto(this.userProfileRepository.save(userProfile));
     }
 
     private UserProfile findUserProfileById(Long id){
@@ -57,7 +60,7 @@ public class UserProfileService {
     }
 
     private UserProfileDto createDto(UserProfile userProfile) {
-        return new UserProfileDto(userProfile.getFullName(), userProfile.getBio(), userProfile.getProfilePicture());
+        return new UserProfileDto(userProfile.getFullName(), userProfile.getBio());
     }
 
     private UserProfileFollowDto createFollowDto(UserProfile userProfile, Map<String, Boolean> followStatus){

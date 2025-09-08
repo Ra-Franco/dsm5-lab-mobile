@@ -22,16 +22,16 @@ public class UserProfile {
     @Column(name = "bio")
     private String bio;
 
+    @Lob
     @Column(name = "profile_picture")
-    private String profilePicture;
+    private byte[] profilePicture;
 
     public UserProfile() {}
 
-    public UserProfile(User user, String bio, String fullname, String profilePicture) {
+    public UserProfile(User user, String bio, String fullname) {
         this.user = user;
         this.bio = bio;
         this.fullName = fullname;
-        this.profilePicture = profilePicture;
     }
 
     public Long getId() {
@@ -50,7 +50,7 @@ public class UserProfile {
         return bio;
     }
 
-    public String getProfilePicture() {
+    public byte[] getProfilePicture() {
         return profilePicture;
     }
 
@@ -62,7 +62,7 @@ public class UserProfile {
         this.bio = bio;
     }
 
-    public void setProfilePicture(String profilePicture) {
+    public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
 }
