@@ -25,4 +25,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     """,
     nativeQuery = true)
     List<ResponsePostProjection> findAllPostsWithLikeCount(@Param("id") Long id);
+
 }

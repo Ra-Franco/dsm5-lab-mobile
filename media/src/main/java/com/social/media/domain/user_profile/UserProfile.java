@@ -22,7 +22,6 @@ public class UserProfile {
     @Column(name = "bio")
     private String bio;
 
-    @Lob
     @Column(name = "profile_picture")
     private byte[] profilePicture;
 
