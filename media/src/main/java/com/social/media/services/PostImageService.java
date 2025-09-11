@@ -1,5 +1,6 @@
 package com.social.media.services;
 
+import com.social.media.domain.posts.Post;
 import com.social.media.domain.posts.images.PostImages;
 import com.social.media.domain.posts.images.dto.PostImagesResponseDto;
 import com.social.media.exception.ResourceNotFoundException;
@@ -25,23 +26,30 @@ public class PostImageService {
     }
 
     public List<PostImagesResponseDto> saveImage(Long postId, List<MultipartFile> files) throws IOException {
+        if (postRepository.findById(postId).isEmpty()) {
+            throw new ResourceNotFoundException("Post not found");
+        }
         List<PostImagesResponseDto> allImages = new ArrayList<>();
+        Post post =  postRepository.findById(postId).get();
         for (MultipartFile file : files) {
             PostImages postImages = new PostImages();
-            if (postRepository.findById(postId).isPresent()) {
-                postImages.setPost( postRepository.findById(postId).get());
-            } else {
-                throw new ResourceNotFoundException("Post not found");
-            }
+            postImages.setPost(post);
             postImages.setImage(file.getBytes());
-             allImages.add(PostImagesResponseDto.fromEntity(postImageRepository.save(postImages)));
-
+            allImages.add(PostImagesResponseDto.fromEntity(postImageRepository.save(postImages)));
         }
         return allImages;
     }
 
-    public List<byte[]> getAllImages(Long postId){
+    public List<PostImagesResponseDto> getAllImages(Long postId){
         List<PostImages> imagesList =  postImageRepository.findByPostIdAll(postId);
-        return imagesList.stream().map(PostImages::getImage).collect(Collectors.toList());
+        return imagesList.stream().map(PostImagesResponseDto::fromEntity).collect(Collectors.toList());
+    }
+
+    public byte[] getImage(Long id){
+        if(this.postImageRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException("Post not found");
+        }
+        return this.postImageRepository.findById(id).get().getImage();
+
     }
 }

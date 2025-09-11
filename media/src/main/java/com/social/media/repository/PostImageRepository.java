@@ -19,5 +19,4 @@ public interface PostImageRepository extends JpaRepository<PostImages, Long> {
 """,
     nativeQuery = true)
     List<PostImages> findByPostIdAll(@Param("postId")Long postId);
-
 }

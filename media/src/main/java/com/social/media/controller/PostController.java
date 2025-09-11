@@ -74,12 +74,18 @@ public class PostController {
     }
 
     @GetMapping("/{id}/images")
-    public ResponseEntity<List<byte[]>> getPostImages(
+    public ResponseEntity<List<PostImagesResponseDto>> getAllPImages(
             @PathVariable("id") Long postId
     ){
       return ResponseEntity.ok(this.postImageService.getAllImages(postId));
     }
 
-    //TODO /{id}/images/{image_id}
+    @GetMapping("/{id}/images/{image_id}")
+    public ResponseEntity<byte[]> getImageById(@PathVariable("image_id") Long imageId){
+        byte[] image = this.postImageService.getImage(imageId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(image);
+    }
 
 }

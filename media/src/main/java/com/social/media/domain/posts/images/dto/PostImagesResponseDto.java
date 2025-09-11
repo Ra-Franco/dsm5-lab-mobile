@@ -7,7 +7,7 @@ public record PostImagesResponseDto(Long id, Long postId, String path) {
         return new PostImagesResponseDto(
                 postImages.getId(),
                 postImages.getPost().getId(),
-                "posts/" + postImages.getPost().getId()+ "/images/" + postImages.getId()
+                "/posts/" + postImages.getPost().getId()+ "/images/" + postImages.getId()
         );
     }
 }
