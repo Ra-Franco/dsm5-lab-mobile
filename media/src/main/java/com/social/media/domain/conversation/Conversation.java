@@ -31,8 +31,17 @@ public class Conversation {
         return createdAt;
     }
 
+    public boolean isHasMessages() {
+        return hasMessages;
+    }
+
+    public void setHasMessages(boolean hasMessages) {
+        this.hasMessages = hasMessages;
+    }
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
+        this.hasMessages = false;
     }
 }

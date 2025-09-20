@@ -1,7 +1,7 @@
 package com.social.media.domain.message;
 
-import com.social.media.domain.enums.ContentType;
 import com.social.media.domain.enums.MessageStatus;
+import com.social.media.domain.message.content.Content;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,7 +15,7 @@ public class Message {
     private String conversationId;
     private String senderId;
     private String receiverId;
-    private ContentType content;
+    private Content content;
     private MessageStatus status;
     private LocalDateTime createdAt;
 
@@ -35,11 +35,11 @@ public class Message {
         this.status = status;
     }
 
-    public ContentType getContent() {
+    public Content getContent() {
         return content;
     }
 
-    public void setContent(ContentType content) {
+    public void Content(Content content) {
         this.content = content;
     }
 
