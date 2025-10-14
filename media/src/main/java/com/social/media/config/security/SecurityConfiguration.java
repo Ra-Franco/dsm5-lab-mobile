@@ -31,7 +31,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("Teste RAmon");
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(req -> {
