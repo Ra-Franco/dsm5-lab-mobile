@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -29,11 +31,12 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+        System.out.println("Teste RAmon");
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+                    req.requestMatchers("/ws-chat/**").permitAll();
                     req.anyRequest().authenticated();
                 })
                 .sessionManagement( session -> {
@@ -51,6 +54,8 @@ public class SecurityConfiguration {
 
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5500"));
+        corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
         configSource.registerCorsConfiguration("/**", corsConfiguration);
